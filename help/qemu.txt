@@ -1,0 +1,72 @@
+qemu-img version 2.0.0, Copyright (c) 2004-2008 Fabrice Bellard
+usage: qemu-img command [command options]
+QEMU disk image utility
+
+Command syntax:
+  check [-q] [-f fmt] [--output=ofmt]  [-r [leaks | all]] filename
+  create [-q] [-f fmt] [-o options] filename [size]
+  commit [-q] [-f fmt] [-t cache] filename
+  compare [-f fmt] [-F fmt] [-p] [-q] [-s] filename1 filename2
+  convert [-c] [-p] [-q] [-n] [-f fmt] [-t cache] [-O output_fmt] [-o options] [-s snapshot_id_or_name] [-l snapshot_param] [-S sparse_size] filename [filename2 [...]] output_filename
+  info [-f fmt] [--output=ofmt] [--backing-chain] filename
+  map [-f fmt] [--output=ofmt] filename
+  snapshot [-q] [-l | -a snapshot | -c snapshot | -d snapshot] filename
+  rebase [-q] [-f fmt] [-t cache] [-p] [-u] -b backing_file [-F backing_fmt] filename
+  resize [-q] filename [+ | -]size
+  amend [-q] [-f fmt] -o options filename
+
+Command parameters:
+  'filename' is a disk image filename
+  'fmt' is the disk image format. It is guessed automatically in most cases
+  'cache' is the cache mode used to write the output disk image, the valid
+    options are: 'none', 'writeback' (default, except for convert), 'writethrough',
+    'directsync' and 'unsafe' (default for convert)
+  'size' is the disk image size in bytes. Optional suffixes
+    'k' or 'K' (kilobyte, 1024), 'M' (megabyte, 1024k), 'G' (gigabyte, 1024M),
+    'T' (terabyte, 1024G), 'P' (petabyte, 1024T) and 'E' (exabyte, 1024P)  are
+    supported. 'b' is ignored.
+  'output_filename' is the destination disk image filename
+  'output_fmt' is the destination format
+  'options' is a comma separated list of format specific options in a
+    name=value format. Use -o ? for an overview of the options supported by the
+    used format
+  'snapshot_param' is param used for internal snapshot, format
+    is 'snapshot.id=[ID],snapshot.name=[NAME]', or
+    '[ID_OR_NAME]'
+  'snapshot_id_or_name' is deprecated, use 'snapshot_param'
+    instead
+  '-c' indicates that target image must be compressed (qcow format only)
+  '-u' enables unsafe rebasing. It is assumed that old and new backing file
+       match exactly. The image doesn't need a working backing file before
+       rebasing in this case (useful for renaming the backing file)
+  '-h' with or without a command shows this help and lists the supported formats
+  '-p' show progress of command (only certain commands)
+  '-q' use Quiet mode - do not print any output (except errors)
+  '-S' indicates the consecutive number of bytes (defaults to 4k) that must
+       contain only zeros for qemu-img to create a sparse image during
+       conversion. If the number of bytes is 0, the source will not be scanned for
+       unallocated or zero sectors, and the destination image will always be
+       fully allocated
+  '--output' takes the format in which the output must be done (human or json)
+  '-n' skips the target volume creation (useful if the volume is created
+       prior to running qemu-img)
+
+Parameters to check subcommand:
+  '-r' tries to repair any inconsistencies that are found during the check.
+       '-r leaks' repairs only cluster leaks, whereas '-r all' fixes all
+       kinds of errors, with a higher risk of choosing the wrong fix or
+       hiding corruption that has already occurred.
+
+Parameters to snapshot subcommand:
+  'snapshot' is the name of the snapshot to create, apply or delete
+  '-a' applies a snapshot (revert disk to saved state)
+  '-c' creates a snapshot
+  '-d' deletes a snapshot
+  '-l' lists all snapshots in the given image
+
+Parameters to compare subcommand:
+  '-f' first image format
+  '-F' second image format
+  '-s' run in Strict mode - fail on different image size or sector allocation
+
+Supported formats: vvfat vpc vmdk vhdx vdi sheepdog sheepdog sheepdog rbd raw host_cdrom host_floppy host_device file qed qcow2 qcow parallels nbd nbd nbd dmg tftp ftps ftp https http cow cloop bochs blkverify blkdebug
